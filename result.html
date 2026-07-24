@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>AP TET Result</title>
+
+</head>
+
+<body>
+
+<h1>AP TET RESULT</h1>
+
+<h2>Congratulations!</h2>
+
+<p>Your Test Has Been Submitted Successfully.</p>
+
+<h2 id="totalQuestions"></h2>
+<h2 id="answeredQuestions"></h2>
+<h2 id="unansweredQuestions"></h2>
+<h2 id="correctAnswers"></h2>
+<h2 id="wrongAnswers"></h2>
+<h2 id="score"></h2>
+
+<h2 id="percentage"></h2>
+
+<script>
+
+let totalQuestions =
+localStorage.getItem("totalQuestions");
+
+document.getElementById("totalQuestions").innerHTML =
+
+"Total Questions : " + totalQuestions;
+
+let answeredQuestions =
+localStorage.getItem("answeredQuestions");
+
+document.getElementById("answeredQuestions").innerHTML =
+
+"Answered Questions : " + answeredQuestions;
+let unansweredQuestions =
+localStorage.getItem("unansweredQuestions");
+
+document.getElementById(
+"unansweredQuestions"
+).innerHTML =
+
+"Unanswered Questions : " +
+unansweredQuestions;
+
+let correctAnswers =
+localStorage.getItem("correctAnswers");
+
+document.getElementById(
+"correctAnswers"
+).innerHTML =
+
+"Correct Answers : " +
+correctAnswers;
+let wrongAnswers =
+localStorage.getItem("wrongAnswers");
+
+document.getElementById("wrongAnswers").innerHTML =
+
+"Wrong Answers : " + wrongAnswers;
+let score =
+localStorage.getItem("correctAnswers");
+
+document.getElementById("score").innerHTML =
+
+"Score : " + score;
+let percentage =
+
+(score / totalQuestions) * 100;
+document.getElementById("percentage").innerHTML =
+
+"Percentage : " +
+
+percentage.toFixed(2) + "%";
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+<title>AP TET CBT Examination</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f5f7fa;
+}
+
+/* Header */
+
+.header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+background:#003366;
+color:white;
+
+}
+
+.timer{
+
+font-size:22px;
+font-weight:bold;
+color:yellow;
+
+}
+
+/* Main Container */
+
+.main{
+
+display:flex;
+
+}
+
+
+/* Question Area */
+
+.questionArea{
+
+width:75%;
+padding:20px;
+
+}
+
+
+/* Question Palette */
+
+.palette{
+
+width:25%;
+background:white;
+padding:15px;
+border-left:2px solid lightgray;
+
+}
+
+
+/* Buttons */
+
+button{
+
+padding:12px;
+margin:5px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+font-size:16px;
+
+}
+
+.save{
+background:green;
+color:white;
+}
+
+.review{
+background:purple;
+color:white;
+}
+
+.previous{
+background:orange;
+color:white;
+}
+
+.submit{
+background:red;
+color:white;
+}
+
+
+/* Options */
+
+.option{
+
+padding:10px;
+margin-top:10px;
+background:white;
+border-radius:5px;
+box-shadow:0 0 5px lightgray;
+
+}
+
+
+/* Question Numbers */
+
+.qNo{
+
+width:45px;
+height:45px;
+margin:5px;
+border-radius:50%;
+border:none;
+background:white;
+box-shadow:0 0 5px gray;
+cursor:pointer;
+
+}
+
+
+.progress{
+
+font-size:18px;
+font-weight:bold;
+margin-top:10px;
+
+}
+
+#questionPalette{
+
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- Header -->
+
+<div class="header">
+
+<div>
+
+Candidate :
+<span id="candidateName"></span>
+
+<br><br>
+
+Subject :
+<span id="subjectName"></span>
+
+</div>
+
+
+<div class="timer" id="timer">
+
+02:30:00
+
+</div>
+
+</div>
+<!-- Main Section -->
+
+<div class="main">
+
+
+
+<!-- Question Section -->
+
+<div class="questionArea">
+
+
+<h2 id="questionNumber">
+Question No : 1
+</h2>
+
+<h3 id="questionText">
+Loading Question....
+</h3>
+
+<div id="optionsContainer">
+</div>
+
+<br>
+
+
+<button class="previous"
+onclick="previousQuestion()">
+
+Previous
+
+</button>
+
+
+
+<button class="save"
+onclick="saveAndNext()">
+
+Save & Next
+
+</button>
+
+
+<button class="review"
+onclick="markForReview()">
+
+Mark For Review
+
+</button>
+
+
+
+<button class="submit"
+onclick="submitTest()">
+
+Submit Test
+
+</button>
+
+
+<div class="progress"
+id="answeredCount">
+
+Answered : 0 / 150
+
+</div>
+
+</div>
+
+
+<!-- Question Palette -->
+
+<div class="palette">
+
+
+<h2>Question Palette</h2>
+
+
+<div id="questionPalette"></div>
+
+<hr>
+
+
+<h3>Palette Colors</h3>
+
+
+<p>White - Not Visited</p>
+
+<p>Green - Answered</p>
+
+<p>Red - Not Answered</p>
+
+<p>Purple - Review</p>
+
+
+</div>
+
+
+
+</div>
+
+<script src="questions.js"></script>
+
+<script>
+
+/********************************
+RANDOM QUESTION SYSTEM
+********************************/
+
+let currentQuestion = 0;
+
+let answers = [];
+
+let totalAnswered = 0;
+
+let questionStatus = [];
+
+let selectedSubject =
+localStorage.getItem("selectedSubject");
+
+
+let subjectQuestions =
+questionBank[selectedSubject];
+
+
+
+/* Random Question Shuffle */
+
+subjectQuestions.sort(() => Math.random()-0.5);
+
+
+
+/* Display First Question */
+
+showQuestion();
+
+
+
+function showQuestion(){
+
+
+let q = subjectQuestions[currentQuestion];
+
+
+
+document.getElementById("questionNumber").innerHTML =
+
+"Question No : " + (currentQuestion+1);
+
+
+
+document.getElementById("questionText").innerHTML =
+
+q.question;
+
+
+
+let optionsHTML = "";
+
+
+/* Random Options */
+
+let randomOptions = [...q.options];
+
+randomOptions.sort(() => Math.random()-0.5);
+
+
+
+for(let option of randomOptions){
+
+
+optionsHTML += `
+
+<div class="option">
+
+<input type="radio"
+name="answer"
+value="${option}">
+
+${option}
+
+</div>
+
+`;
+
+
+}
+
+
+document.getElementById("optionsContainer").innerHTML =
+
+optionsHTML;
+
+
+let selected = answers[currentQuestion];
+
+if(selected != undefined){
+
+let radios =
+document.getElementsByName("answer");
+
+for(let radio of radios){
+
+if(radio.value == selected){
+
+radio.checked = true;
+
+}
+
+}
+
+}
+
+}
+
+
+
+/* Candidate Name */
+
+let name = localStorage.getItem("name");
+
+document.getElementById("candidateName").innerHTML=name;
+
+
+/* Subject Name */
+
+let subject = localStorage.getItem("selectedSubject");
+
+document.getElementById("subjectName").innerHTML=subject;
+
+let palette =
+document.getElementById("questionPalette");
+
+for(let i=1;i<=subjectQuestions.length;i++){
+
+let btn = document.createElement("button");
+
+btn.innerHTML = i;
+
+btn.className = "qNo";
+
+
+btn.onclick = function(){
+
+currentQuestion = i - 1;
+
+showQuestion();
+
+};
+
+
+palette.appendChild(btn);
+
+}
+
+function saveAndNext(){
+
+
+let selectedAnswer =
+
+document.querySelector(
+
+'input[name="answer"]:checked'
+
+);
+
+
+if(selectedAnswer == null){
+
+alert("Please Select an Answer.");
+
+return;
+
+}
+
+
+
+/* Save Answer */
+
+
+answers[currentQuestion] =
+
+selectedAnswer.value;
+
+questionStatus[currentQuestion] =
+"answered";
+
+/* Update Answer Count */
+
+
+totalAnswered = 0;
+
+
+for(let i=0;i<answers.length;i++){
+
+if(answers[i] != undefined){
+
+totalAnswered++;
+
+}
+
+}
+
+
+
+document.getElementById("answeredCount").innerHTML =
+
+"Answered : "
+
++ totalAnswered +
+
+" / 150";
+
+
+
+/* Next Question */
+
+
+if(currentQuestion <
+
+subjectQuestions.length-1){
+
+
+currentQuestion++;
+
+updatePalette();
+
+showQuestion();
+
+
+}
+
+
+else{
+
+
+alert("You Have Completed All Questions.");
+
+}
+
+
+}
+
+function markForReview(){
+
+alert("Review button clicked");
+
+questionStatus[currentQuestion]="review";
+
+updatePalette();
+
+}
+
+
+function updatePalette(){
+
+let buttons =
+document.getElementsByClassName("qNo");
+
+for(let i=0;i<buttons.length;i++){
+
+if(questionStatus[i]=="review"){
+
+buttons[i].style.background="purple";
+buttons[i].style.color="white";
+
+}
+
+else if(questionStatus[i]=="answered"){
+
+buttons[i].style.background="green";
+buttons[i].style.color="white";
+
+}
+
+else if(questionStatus[i]=="notAnswered"){
+
+buttons[i].style.background="red";
+buttons[i].style.color="white";
+
+}
+
+else{
+
+buttons[i].style.background="white";
+buttons[i].style.color="black";
+
+}
+
+}
+
+}
+
+
+function previousQuestion(){
+
+if(currentQuestion > 0){
+
+currentQuestion--;
+
+showQuestion();
+
+}
+
+}
+
+function submitTest(){
+
+let check = confirm(
+"Are you sure you want to submit the test?"
+);
+
+if(check){
+
+localStorage.setItem("totalQuestions",subjectQuestions.length);
+
+localStorage.setItem("answeredQuestions",totalAnswered);
+let unansweredQuestions =
+subjectQuestions.length - totalAnswered;
+
+localStorage.setItem(
+"unansweredQuestions",
+unansweredQuestions
+);
+
+let correctAnswers = 0;
+let wrongAnswers = 0;
+
+for(let i=0; i<subjectQuestions.length; i++){
+
+if(answers[i] == subjectQuestions[i].answer){
+
+correctAnswers++;
+
+}
+
+else if(answers[i] != undefined){
+
+wrongAnswers++;
+
+}
+
+}
+
+localStorage.setItem(
+"correctAnswers",
+correctAnswers
+);
+
+localStorage.setItem(
+"wrongAnswers",
+wrongAnswers
+);
+
+window.location.href = "result.html";
+}
+
+}
+
+/******** TIMER SYSTEM ********/
+
+let totalSeconds = 9000;
+
+/*
+2 Hours = 7200 Seconds
+30 Minutes = 1800 Seconds
+
+Total = 9000 Seconds
+*/
+
+
+let warningShown = false;
+
+
+let examTimer = setInterval(function(){
+
+
+let hours = Math.floor(totalSeconds/3600);
+
+let minutes = Math.floor((totalSeconds%3600)/60);
+
+let seconds = totalSeconds%60;
+
+
+
+if(hours<10){
+
+hours="0"+hours;
+
+}
+
+
+if(minutes<10){
+
+minutes="0"+minutes;
+
+}
+
+
+if(seconds<10){
+
+seconds="0"+seconds;
+
+}
+
+
+
+document.getElementById("timer").innerHTML =
+
+hours + ":" + minutes + ":" + seconds;
+
+
+
+/* Last 10 Minutes Warning */
+
+
+if(totalSeconds==600 && warningShown==false){
+
+warningShown = true;
+
+
+alert("Only 10 Minutes Left. Please Review Your Answers.");
+
+}
+
+
+
+/* Time Up */
+
+
+if(totalSeconds<=0){
+
+clearInterval(examTimer);
+
+alert("Time Up! Your Test Will Be Submitted Automatically.");
+
+submitTest();
+
+}
+
+
+totalSeconds--;
+
+
+},1000);
+
+</script>
+
+
+
+
+</body>
+</html>

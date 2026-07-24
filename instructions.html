@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>AP TET Instructions</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f8ff;
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0 0 15px gray;
+}
+
+h1{
+text-align:center;
+color:#003366;
+}
+
+h2{
+color:#003366;
+}
+
+ul{
+line-height:2;
+font-size:17px;
+}
+
+.info{
+background:#e8f0ff;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+button{
+padding:15px 25px;
+background:#003366;
+color:white;
+border:none;
+border-radius:8px;
+font-size:18px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0055aa;
+}
+
+.checkbox{
+margin-top:20px;
+font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>AP TET MOCK TEST - Instructions</h1>
+
+<div class="info">
+
+<h2>Candidate Details</h2>
+
+<p>
+Candidate Name :
+<b><span id="candidateName"></span></b>
+</p>
+
+</div>
+
+
+<h2>General Instructions</h2>
+
+<ul>
+
+<li>Total Questions : 150</li>
+
+<li>Total Marks : 150</li>
+
+<li>Total Time : 2 Hours 30 Minutes</li>
+
+<li>Each Question Carries 1 Mark.</li>
+
+<li>There is NO Negative Marking.</li>
+
+<li>You can change your answer before submitting.</li>
+
+<li>You can mark questions for review.</li>
+
+<li>You can revisit any question during the examination.</li>
+
+<li>Do NOT refresh or close the browser while writing the exam.</li>
+
+<li>The exam will be automatically submitted when the time is over.</li>
+
+</ul>
+
+
+<h2>Question Palette Information</h2>
+
+<ul>
+
+<li>White - Not Visited</li>
+
+<li>Red - Not Answered</li>
+
+<li>Green - Answered</li>
+
+<li>Purple - Marked For Review</li>
+
+<li>Blue - Answered & Marked For Review</li>
+
+</ul>
+
+
+<div class="checkbox">
+
+<input type="checkbox" id="agree">
+
+I have read and understood all the instructions.
+
+</div>
+
+<br>
+
+<button onclick="startExam()">
+
+Start Examination
+
+</button>
+
+</div>
+
+
+
+<script>
+
+
+let name = localStorage.getItem("name");
+
+document.getElementById("candidateName").innerHTML = name;
+
+
+
+function startExam(){
+
+let check = document.getElementById("agree").checked;
+
+
+if(check==false){
+
+alert("Please accept the instructions.");
+
+return;
+
+}
+
+
+window.location.href="subjects.html";
+
+}
+
+
+</script>
+
+
+</body>
+</html>
